@@ -1,10 +1,9 @@
-import Intro from "@/components/Intro";
-import Category from "@/components/Category";
+import SignUp from "./signUp/page";
+
 export default function Home() {
   return (
-    <div className="max-w-[1440px] mx-auto">
-      <Intro />
-      <Category />
+    <div className="w-full h-full bg-[#FAFAFA] flex flex-col items-center justify-start">
+      <SignUp />
     </div>
   );
 }

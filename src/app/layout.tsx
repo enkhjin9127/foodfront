@@ -1,5 +1,5 @@
 import "./globals.css";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
 
 export default function RootLayout({
   children,
@@ -12,7 +12,7 @@ export default function RootLayout({
         <title>My App</title>
       </head>
       <body>
-        <Header />
+        {/* <Header /> */}
         {children}
       </body>
     </html>

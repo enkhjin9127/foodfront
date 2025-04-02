@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import signUpImage from "@/img/sign-up.png";
+import { signUpUser } from "@/controllers/api";
 
 const SignUp: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -33,7 +34,8 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     setIsPasswordWeak(!isStrongPassword(password));
-  }, [password]); // Runs whenever password changes
+  }, [password]);
+
   const handleNext = () => {
     if (step === 1 && isEmailValid) {
       setStep(2);
@@ -46,12 +48,17 @@ const SignUp: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (step === 2 && password && password === confirmPassword) {
-      console.log("Email:", email);
-      console.log("Password:", password);
-      // Add your form submission logic here
+      try {
+        const response = await signUpUser(email, password);
+        console.log("Sign-up successful:", response);
+        alert("Sign-up successful! Please log in.");
+      } catch (error) {
+        console.error("Sign-up failed:", error);
+        alert("Sign-up failed. Please try again.");
+      }
     }
   };
 

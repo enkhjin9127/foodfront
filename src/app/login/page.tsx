@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import signUpImage from "@/img/sign-up.png";
+import { signInUser } from "@/controllers/api";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -9,10 +10,8 @@ export default function LoginForm() {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isPasswordWeak, setIsPasswordWeak] = useState(true);
 
-  // Email regex validation
   const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
 
-  // Password strength check (at least 8 characters, 1 uppercase, 1 digit)
   const isStrongPassword = (pass: string) =>
     pass.length >= 8 && /[A-Z]/.test(pass) && /\d/.test(pass);
 
@@ -26,6 +25,21 @@ export default function LoginForm() {
     const value = e.target.value;
     setPassword(value);
     setIsPasswordWeak(!isStrongPassword(value));
+  };
+
+  const handleLogin = async () => {
+    if (isValidEmail && !isPasswordWeak) {
+      try {
+        const response = await signInUser(email, password);
+        console.log("Login successful:", response);
+        alert("Login successful!");
+
+        localStorage.setItem("authToken", response.token);
+      } catch (error) {
+        console.error("Login failed:", error);
+        alert("Login failed. Please check your credentials and try again.");
+      }
+    }
   };
 
   return (
@@ -69,6 +83,7 @@ export default function LoginForm() {
               ? "bg-blue-500 text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
+          onClick={handleLogin}
           disabled={!(isValidEmail && !isPasswordWeak)}
         >
           Lets Go
@@ -76,7 +91,7 @@ export default function LoginForm() {
 
         <p className="text-gray-500 mt-4">
           Don&apos;t have an account?{" "}
-          <a href="#" className="text-blue-500">
+          <a href="/signUp" className="text-blue-500">
             Sign up
           </a>
         </p>
